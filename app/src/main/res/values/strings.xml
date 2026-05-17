@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gym Rest Timer</string>
+    <string name="notification_channel_name">Rest Timer</string>
+    <string name="notification_channel_desc">Active rest timer notifications</string>
+    <string name="notif_idle">Workout active</string>
+    <string name="notif_set">Set %1$d in progress</string>
+    <string name="notif_rest">Set %1$d · rest %2$s</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_resume">Resume</string>
+    <string name="action_stop">Stop</string>
+    <string name="action_add_30">+30s</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_finish_set">Finish set</string>
+    <string name="action_close">Close</string>
+    <string name="workout_off">Workout off</string>
+    <string name="workout_on">Workout on</string>
+    <string name="profile_label">Rest profile</string>
+    <string name="grant_overlay">Grant overlay permission</string>
+    <string name="grant_overlay_rationale">Required to show the floating timer over other apps.</string>
+    <string name="grant_notifications">Grant notification permission</string>
+    <string name="tab_timer">Timer</string>
+    <string name="tab_stopwatch">Stopwatch</string>
+    <string name="action_reset">Reset</string>
+    <string name="action_lap">Lap</string>
+    <string name="action_start">Start</string>
+    <string name="notif_stopwatch">Stopwatch %1$s</string>
+    <string name="notif_stopwatch_paused">Stopwatch paused %1$s</string>
+</resources>

@@ -1,0 +1,71 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- ============ STOPWATCH (left half) ============ -->
+
+    <!-- Crown -->
+    <path
+        android:fillColor="#FF6A00"
+        android:pathData="M30,32 L38,32 L38,40 L30,40 Z"/>
+
+    <!-- Crown-to-body connector -->
+    <path
+        android:fillColor="#FF6A00"
+        android:pathData="M32,38 L36,38 L36,44 L32,44 Z"/>
+
+    <!-- Body circle -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF6A00"
+        android:strokeWidth="5"
+        android:pathData="M34,62 m-18,0 a18,18 0 1,0 36,0 a18,18 0 1,0 -36,0"/>
+
+    <!-- Tick marks 12 / 3 / 6 / 9 -->
+    <path
+        android:strokeColor="#FF6A00"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M34,48 L34,51 M34,73 L34,76 M20,62 L23,62 M45,62 L48,62"/>
+
+    <!-- Hand to ~2 o'clock -->
+    <path
+        android:strokeColor="#FF6A00"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:pathData="M34,62 L44,53"/>
+
+    <!-- Center pivot -->
+    <path
+        android:fillColor="#FF6A00"
+        android:pathData="M34,62 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0"/>
+
+    <!-- ============ DUMBBELL (right half) ============ -->
+
+    <!-- Handle bar -->
+    <path
+        android:fillColor="#FF6A00"
+        android:pathData="M64,58 L86,58 L86,66 L64,66 Z"/>
+
+    <!-- Left weight plate -->
+    <path
+        android:fillColor="#FF6A00"
+        android:pathData="M60,48 L66,48 L66,76 L60,76 Z"/>
+
+    <!-- Left end cap (inner) -->
+    <path
+        android:fillColor="#FF6A00"
+        android:pathData="M66,52 L70,52 L70,72 L66,72 Z"/>
+
+    <!-- Right weight plate -->
+    <path
+        android:fillColor="#FF6A00"
+        android:pathData="M84,48 L90,48 L90,76 L84,76 Z"/>
+
+    <!-- Right end cap (inner) -->
+    <path
+        android:fillColor="#FF6A00"
+        android:pathData="M80,52 L84,52 L84,72 L80,72 Z"/>
+</vector>
