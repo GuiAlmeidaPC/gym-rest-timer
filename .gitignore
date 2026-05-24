@@ -10,3 +10,6 @@ captures/
 .DS_Store
 .claude/
 *.apk
+
+# Antigravity CLI Metadata
+.antigravitycli/
