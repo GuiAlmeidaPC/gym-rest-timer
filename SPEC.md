@@ -266,6 +266,26 @@ JAVA_HOME=/tmp/jdk-17.0.2 ANDROID_HOME=/home/gui/Android/Sdk \
 
 Before any user-facing release, bump `versionCode` (integer, monotonic) and `versionName` in `app/build.gradle.kts`. `adb install -r` works without a bump but Play Store / proper update flows require it.
 
+### Release management
+- Releases are cut from `main` using annotated Git tags and GitHub Releases.
+- `versionName` uses semantic format (`MAJOR.MINOR.PATCH`); release tags use the matching `vMAJOR.MINOR.PATCH` format.
+- `versionCode` must increase by 1 for every release artifact uploaded to a device, GitHub Release, or app store.
+- User-visible changes are tracked in `CHANGELOG.md`.
+- The operational checklist, signing-secret names, and GitHub Actions release flow are documented in `docs/RELEASE.md`.
+- Before tagging a release, run:
+
+```
+./gradlew :app:testDebugUnitTest :app:testReleaseUnitTest :app:assembleRelease :app:bundleRelease :app:lintRelease
+```
+
+Tag and push the release after the release-prep commit:
+
+```
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
+git push origin main
+git push origin vX.Y.Z
+```
+
 ### ProGuard / R8 keep rules
 `app/proguard-rules.pro` keeps Hilt-generated classes, Room entities/DAOs, and everything under `com.gymresttimer.data.*` (Room accesses them reflectively). Add new keep rules if introducing additional reflection-based libraries.
 
