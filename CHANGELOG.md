@@ -4,6 +4,16 @@ All notable user-visible changes are recorded here.
 
 This project uses Android `versionCode` for store upgrade ordering and `versionName` tags of the form `vMAJOR.MINOR.PATCH` for human-readable releases.
 
+## [1.1.1] - 2026-05-27
+
+### Changed
+- Target Android 15 / API 35 for Google Play submission readiness.
+- Updated Android Gradle Plugin to 8.6.1 for API 35 support.
+- Added Play Store listing copy and privacy policy documentation.
+
+### Fixed
+- Replaced deprecated Compose menu anchor usage in the rest profile selector.
+
 ## [1.1.0] - 2026-05-27
 
 ### Added
