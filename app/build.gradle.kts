@@ -15,12 +15,12 @@ val keystoreProps = Properties().apply {
 
 android {
     namespace = "com.gymresttimer"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.gymresttimer"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 2
         versionName = "1.1.0"
     }

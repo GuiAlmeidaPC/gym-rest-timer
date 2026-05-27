@@ -241,9 +241,10 @@ Notes:
 ## 10. Build & Deploy
 
 ### Toolchain
-- **JDK 17** required (AGP 8.5 is incompatible with JDK 18+). Local copy: `/tmp/jdk-17.0.2`.
-- **Android SDK** at `/home/gui/Android/Sdk` with platform-34 + build-tools-34 installed.
-- Always invoke Gradle with `JAVA_HOME=/tmp/jdk-17.0.2 ANDROID_HOME=/home/gui/Android/Sdk`.
+- **JDK 17** required.
+- **Android SDK** with platform-35 + build-tools-35 installed.
+- Release builds target Android 15 / API 35 to satisfy current Google Play submission requirements.
+- Android Gradle Plugin 8.6.x supports API 35; keep AGP at 8.6.1 or newer while targeting Android 15.
 
 ### Release signing
 - Keystore: `keystore/release.jks` (RSA 2048, validity 10000 days).

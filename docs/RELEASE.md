@@ -13,6 +13,10 @@ This project releases from `main` using annotated Git tags and GitHub Releases.
   - Minor: user-visible feature, for example `1.2.0`.
   - Major: incompatible behavior or data-model change, for example `2.0.0`.
 
+## Google Play target SDK
+
+Release builds use `compileSdk = 35` and `targetSdk = 35` for Android 15 / API 35 compatibility. Keep this at or above Google Play's current target API requirement before uploading a bundle to Play Console. Keep Android Gradle Plugin at 8.6.1 or newer so the build is tested against API 35.
+
 ## Required local checks
 
 Run these before creating a release tag:
