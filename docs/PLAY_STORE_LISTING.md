@@ -14,7 +14,7 @@ Use this copy when creating the Play Console store listing for Gym Rest Timer.
 
 ## Short description
 
-Rest timer and stopwatch for focused gym sets, with notifications and Picture-in-Picture.
+Workout rest timer and stopwatch with notifications and Picture-in-Picture.
 
 ## Full description
 

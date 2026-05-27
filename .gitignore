@@ -13,3 +13,8 @@ captures/
 
 # Antigravity CLI Metadata
 .antigravitycli/
+
+# Production Signing Credentials (DO NOT COMMIT)
+*.keystore
+keystore_base64.txt
+
