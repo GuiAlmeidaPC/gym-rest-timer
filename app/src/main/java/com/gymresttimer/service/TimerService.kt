@@ -108,6 +108,11 @@ class TimerService : LifecycleService() {
                 if (activeMode.current() == ActiveMode.Timer) activeMode.set(fallbackMode())
             }
             ACTION_FINISH_SET -> timerRepo.dispatch(WorkoutEvent.FinishSet)
+            ACTION_RESET_SETS -> timerRepo.dispatch(WorkoutEvent.ResetSets)
+            ACTION_SET_REST_DURATION -> {
+                val duration = intent.getIntExtra(EXTRA_REST_SECONDS, timerRepo.currentRestDuration())
+                timerRepo.dispatch(WorkoutEvent.SetRestDuration(duration))
+            }
             ACTION_SKIP_REST -> timerRepo.dispatch(WorkoutEvent.SkipRest)
             ACTION_ADD_30S -> timerRepo.dispatch(WorkoutEvent.Add30s)
             ACTION_PAUSE_TIMER -> timerRepo.dispatch(WorkoutEvent.Pause)
@@ -403,6 +408,8 @@ class TimerService : LifecycleService() {
         const val ACTION_SKIP_REST = "com.gymresttimer.action.SKIP_REST"
         const val ACTION_ADD_30S = "com.gymresttimer.action.ADD_30S"
         const val ACTION_FINISH_SET = "com.gymresttimer.action.FINISH_SET"
+        const val ACTION_RESET_SETS = "com.gymresttimer.action.RESET_SETS"
+        const val ACTION_SET_REST_DURATION = "com.gymresttimer.action.SET_REST_DURATION"
 
         const val ACTION_STOPWATCH_START = "com.gymresttimer.action.STOPWATCH_START"
         const val ACTION_STOPWATCH_PAUSE = "com.gymresttimer.action.STOPWATCH_PAUSE"
@@ -415,6 +422,13 @@ class TimerService : LifecycleService() {
         fun startTimer(context: Context, restSeconds: Int) {
             val intent = Intent(context, TimerService::class.java)
                 .setAction(ACTION_START_WORKOUT)
+                .putExtra(EXTRA_REST_SECONDS, restSeconds)
+            ContextCompat.startForegroundService(context, intent)
+        }
+
+        fun setRestDuration(context: Context, restSeconds: Int) {
+            val intent = Intent(context, TimerService::class.java)
+                .setAction(ACTION_SET_REST_DURATION)
                 .putExtra(EXTRA_REST_SECONDS, restSeconds)
             ContextCompat.startForegroundService(context, intent)
         }

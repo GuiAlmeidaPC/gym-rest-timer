@@ -69,6 +69,8 @@ fun DashboardScreen(
     onTimerStart: (restSeconds: Int) -> Unit,
     onTimerStop: () -> Unit,
     onTimerFinishSet: () -> Unit,
+    onTimerResetSets: () -> Unit,
+    onTimerRestDurationChange: (restSeconds: Int) -> Unit,
     onTimerSkip: () -> Unit,
     onTimerAdd30: () -> Unit,
     onTimerPauseResume: (paused: Boolean) -> Unit,
@@ -140,6 +142,8 @@ fun DashboardScreen(
                     onStart = onTimerStart,
                     onStop = onTimerStop,
                     onFinishSet = onTimerFinishSet,
+                    onResetSets = onTimerResetSets,
+                    onRestDurationChange = onTimerRestDurationChange,
                     onSkip = onTimerSkip,
                     onAdd30 = onTimerAdd30,
                     onPauseResume = onTimerPauseResume,
@@ -190,6 +194,8 @@ private fun TimerTab(
     onStart: (Int) -> Unit,
     onStop: () -> Unit,
     onFinishSet: () -> Unit,
+    onResetSets: () -> Unit,
+    onRestDurationChange: (Int) -> Unit,
     onSkip: () -> Unit,
     onAdd30: () -> Unit,
     onPauseResume: (paused: Boolean) -> Unit,
@@ -203,7 +209,14 @@ private fun TimerTab(
         ProfileSelector(
             profiles = ui.profiles.map { it.profileName to it.restDurationSeconds },
             selectedLabel = ui.selectedProfile?.let { "${it.profileName} (${it.restDurationSeconds}s)" } ?: "—",
-            onSelect = { idx -> ui.profiles.getOrNull(idx)?.let(onSelectProfile) },
+            onSelect = { idx ->
+                ui.profiles.getOrNull(idx)?.let { profile ->
+                    onSelectProfile(profile)
+                    if (ui.workout !is WorkoutState.Idle) {
+                        onRestDurationChange(profile.restDurationSeconds)
+                    }
+                }
+            },
         )
 
         WorkoutToggle(
@@ -214,6 +227,12 @@ private fun TimerTab(
                 else onStop()
             },
         )
+
+        if (ui.workout !is WorkoutState.Idle) {
+            TextButton(onClick = onResetSets, modifier = Modifier.align(Alignment.End)) {
+                Text("Reset sets", color = MaterialTheme.colorScheme.primary)
+            }
+        }
 
         Spacer(Modifier.height(4.dp))
 

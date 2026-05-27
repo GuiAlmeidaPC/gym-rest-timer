@@ -2,7 +2,7 @@ package com.gymresttimer.ui.pip
 
 import android.os.SystemClock
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gymresttimer.domain.ActiveMode
@@ -57,18 +58,27 @@ fun PipContent(
         ActiveMode.None -> "—"
     }
 
-    Box(
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center,
     ) {
+        val fontSize = minOf(
+            64f,
+            maxWidth.value / (text.length.coerceAtLeast(1) * 0.58f),
+            maxHeight.value * 0.58f,
+        ).coerceAtLeast(20f).sp
+
         Text(
             text = text,
             color = MaterialTheme.colorScheme.primary,
-            fontSize = 64.sp,
+            fontSize = fontSize,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Monospace,
+            maxLines = 1,
+            softWrap = false,
+            textAlign = TextAlign.Center,
         )
     }
 }

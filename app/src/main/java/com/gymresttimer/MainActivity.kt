@@ -113,6 +113,8 @@ class MainActivity : ComponentActivity() {
             onTimerStart = { restSeconds -> TimerService.startTimer(this, restSeconds) },
             onTimerStop = { TimerService.send(this, TimerService.ACTION_STOP_WORKOUT) },
             onTimerFinishSet = { TimerService.send(this, TimerService.ACTION_FINISH_SET) },
+            onTimerResetSets = { TimerService.send(this, TimerService.ACTION_RESET_SETS) },
+            onTimerRestDurationChange = { restSeconds -> TimerService.setRestDuration(this, restSeconds) },
             onTimerSkip = { TimerService.send(this, TimerService.ACTION_SKIP_REST) },
             onTimerAdd30 = { TimerService.send(this, TimerService.ACTION_ADD_30S) },
             onTimerPauseResume = { paused ->

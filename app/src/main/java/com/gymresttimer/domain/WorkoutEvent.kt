@@ -4,6 +4,8 @@ sealed interface WorkoutEvent {
     data class StartWorkout(val restDurationSeconds: Int) : WorkoutEvent
     data object StopWorkout : WorkoutEvent
     data object FinishSet : WorkoutEvent
+    data object ResetSets : WorkoutEvent
+    data class SetRestDuration(val restDurationSeconds: Int) : WorkoutEvent
     data object SkipRest : WorkoutEvent
     data object Add30s : WorkoutEvent
     data object Pause : WorkoutEvent

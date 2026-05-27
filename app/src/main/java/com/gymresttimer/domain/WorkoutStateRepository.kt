@@ -42,6 +42,21 @@ class WorkoutStateRepository @Inject constructor() {
             )
             else -> state
         }
+        WorkoutEvent.ResetSets -> when (state) {
+            WorkoutState.Idle -> state
+            else -> WorkoutState.ActiveSet(currentSet = 1)
+        }
+        is WorkoutEvent.SetRestDuration -> {
+            restDurationSeconds = event.restDurationSeconds.coerceAtLeast(1)
+            when (state) {
+                is WorkoutState.RestCountdown -> state.copy(
+                    secondsRemaining = restDurationSeconds,
+                    durationTotal = restDurationSeconds,
+                    paused = state.paused,
+                )
+                else -> state
+            }
+        }
         WorkoutEvent.SkipRest -> when (state) {
             is WorkoutState.RestCountdown -> WorkoutState.ActiveSet(currentSet = state.currentSet + 1)
             else -> state
