@@ -1,0 +1,72 @@
+# Release Process
+
+This project releases from `main` using annotated Git tags and GitHub Releases.
+
+## Versioning
+
+- `app/build.gradle.kts` owns the Android version:
+  - `versionCode`: integer; increase by 1 for every release uploaded to a device, GitHub Release, or store.
+  - `versionName`: human-readable semantic version, for example `1.1.0`.
+- Git tags use the `versionName` with a `v` prefix, for example `v1.1.0`.
+- Version bump rules:
+  - Patch: bug fixes only, for example `1.1.1`.
+  - Minor: user-visible feature, for example `1.2.0`.
+  - Major: incompatible behavior or data-model change, for example `2.0.0`.
+
+## Required local checks
+
+Run these before creating a release tag:
+
+```bash
+./gradlew :app:testDebugUnitTest :app:testReleaseUnitTest :app:assembleRelease :app:bundleRelease :app:lintRelease
+```
+
+If possible, install the release APK on a real Android device and verify:
+
+- Timer starts from a rest profile.
+- Finish set enters rest countdown.
+- Pause/resume, +30s, skip rest, and reset sets behave correctly.
+- Changing rest profile during an active workout updates the next/current rest duration.
+- Pressing Home during an active timer or stopwatch enters Picture-in-Picture.
+- Foreground notification actions control the active mode.
+
+## Release checklist
+
+1. Confirm the working tree is clean.
+2. Update `versionCode` and `versionName` in `app/build.gradle.kts`.
+3. Update `CHANGELOG.md` with the new version and date.
+4. Run the required local checks.
+5. Commit the release prep:
+
+   ```bash
+   git add app/build.gradle.kts CHANGELOG.md
+   git commit -m "Prepare release vX.Y.Z"
+   ```
+
+6. Create and push an annotated tag:
+
+   ```bash
+   git tag -a vX.Y.Z -m "Release vX.Y.Z"
+   git push origin main
+   git push origin vX.Y.Z
+   ```
+
+7. The GitHub Actions release workflow builds the release APK/AAB and creates the GitHub Release.
+8. Review the generated GitHub Release notes and attached artifacts.
+
+## GitHub Actions signing secrets
+
+The release workflow expects these repository secrets:
+
+- `RELEASE_KEYSTORE_BASE64`: base64-encoded Android keystore file.
+- `RELEASE_KEYSTORE_PASSWORD`: keystore password.
+- `RELEASE_KEY_ALIAS`: key alias.
+- `RELEASE_KEY_PASSWORD`: key password.
+
+Create `RELEASE_KEYSTORE_BASE64` locally from the keystore file:
+
+```bash
+base64 -w 0 release.keystore
+```
+
+Never commit the keystore file or `keystore.properties`.
