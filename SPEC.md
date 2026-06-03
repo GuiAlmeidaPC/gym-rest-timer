@@ -265,6 +265,14 @@ JAVA_HOME=/tmp/jdk-17.0.2 ANDROID_HOME=/home/gui/Android/Sdk \
 # → app/build/outputs/apk/release/app-release.apk
 ```
 
+**Always** copy the freshly built APK to `/var/home/gui/Downloads/gym-rest-timer.apk`
+after every successful build so the latest artifact is in a stable, predictable
+location for sideloading:
+
+```
+cp app/build/outputs/apk/debug/app-debug.apk /var/home/gui/Downloads/gym-rest-timer.apk
+```
+
 Before any user-facing release, bump `versionCode` (integer, monotonic) and `versionName` in `app/build.gradle.kts`. `adb install -r` works without a bump but Play Store / proper update flows require it.
 
 ### Release management

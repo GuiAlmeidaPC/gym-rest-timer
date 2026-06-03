@@ -40,6 +40,12 @@ app/src/main/
 2. Let Gradle sync — it'll fetch Compose BOM, Hilt, Room, KSP.
 3. Run on a physical device for foreground service, notification, and Picture-in-Picture behavior.
 
+After every successful APK build, always copy the artifact to a stable location for sideloading:
+
+```
+cp app/build/outputs/apk/debug/app-debug.apk /var/home/gui/Downloads/gym-rest-timer.apk
+```
+
 ## Release management
 
 Releases are tracked with annotated Git tags and GitHub Releases.
