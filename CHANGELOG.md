@@ -4,6 +4,20 @@ All notable user-visible changes are recorded here.
 
 This project uses Android `versionCode` for store upgrade ordering and `versionName` tags of the form `vMAJOR.MINOR.PATCH` for human-readable releases.
 
+## [1.2.0] - 2026-06-03
+
+### Added
+- Language selection (English, Português (BR), Français) from a new overflow menu in the top-right of the dashboard.
+- Reset sets action in the Picture-in-Picture controls during an active set.
+- Set number shown in the Picture-in-Picture display.
+
+### Changed
+- Smaller Picture-in-Picture window and timer numbers for a more compact overlay.
+- Added padding to the launcher icon so it sits better within the adaptive-icon safe zone.
+
+### Fixed
+- Foreground notification is now dismissed when the workout toggle is turned off.
+
 ## [1.1.1] - 2026-05-27
 
 ### Changed
