@@ -26,4 +26,22 @@
     <string name="action_start">Start</string>
     <string name="notif_stopwatch">Stopwatch %1$s</string>
     <string name="notif_stopwatch_paused">Stopwatch paused %1$s</string>
+
+    <!-- Dashboard -->
+    <string name="notif_permission_title">Notification permission required</string>
+    <string name="notif_permission_body">Required for the foreground service notification.</string>
+    <string name="reset_sets">Reset sets</string>
+    <string name="toggle_hint">Toggle workout on to start tracking sets.</string>
+    <string name="set_label">SET %1$d</string>
+    <string name="set_rest_label">SET %1$d · REST</string>
+    <string name="paused">PAUSED</string>
+    <string name="skip_rest">Skip rest</string>
+    <string name="lap_number">Lap %1$d</string>
+
+    <!-- Overflow menu / language -->
+    <string name="menu">Menu</string>
+    <string name="language">Language</string>
+    <string name="lang_english">English</string>
+    <string name="lang_portuguese_br">Português (BR)</string>
+    <string name="lang_french">Français</string>
 </resources>

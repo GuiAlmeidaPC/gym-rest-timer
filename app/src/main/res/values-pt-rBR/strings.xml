@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gym Rest Timer</string>
+    <string name="notification_channel_name">Timer de descanso</string>
+    <string name="notification_channel_desc">Notificações do timer de descanso ativo</string>
+    <string name="notif_idle">Treino ativo</string>
+    <string name="notif_set">Série %1$d em andamento</string>
+    <string name="notif_rest">Série %1$d · descanso %2$s</string>
+    <string name="action_pause">Pausar</string>
+    <string name="action_resume">Retomar</string>
+    <string name="action_stop">Parar</string>
+    <string name="action_add_30">+30s</string>
+    <string name="action_skip">Pular</string>
+    <string name="action_finish_set">Concluir série</string>
+    <string name="action_close">Fechar</string>
+    <string name="workout_off">Treino desligado</string>
+    <string name="workout_on">Treino ligado</string>
+    <string name="profile_label">Perfil de descanso</string>
+    <string name="grant_overlay">Conceder permissão de sobreposição</string>
+    <string name="grant_overlay_rationale">Necessário para mostrar o timer flutuante sobre outros apps.</string>
+    <string name="grant_notifications">Conceder notificações</string>
+    <string name="tab_timer">Timer</string>
+    <string name="tab_stopwatch">Cronômetro</string>
+    <string name="action_reset">Zerar</string>
+    <string name="action_lap">Volta</string>
+    <string name="action_start">Iniciar</string>
+    <string name="notif_stopwatch">Cronômetro %1$s</string>
+    <string name="notif_stopwatch_paused">Cronômetro pausado %1$s</string>
+
+    <!-- Dashboard -->
+    <string name="notif_permission_title">Permissão de notificação necessária</string>
+    <string name="notif_permission_body">Necessária para a notificação do serviço em primeiro plano.</string>
+    <string name="reset_sets">Zerar séries</string>
+    <string name="toggle_hint">Ligue o treino para começar a contar as séries.</string>
+    <string name="set_label">SÉRIE %1$d</string>
+    <string name="set_rest_label">SÉRIE %1$d · DESCANSO</string>
+    <string name="paused">PAUSADO</string>
+    <string name="skip_rest">Pular descanso</string>
+    <string name="lap_number">Volta %1$d</string>
+
+    <!-- Overflow menu / language -->
+    <string name="menu">Menu</string>
+    <string name="language">Idioma</string>
+    <string name="lang_english">English</string>
+    <string name="lang_portuguese_br">Português (BR)</string>
+    <string name="lang_french">Français</string>
+</resources>

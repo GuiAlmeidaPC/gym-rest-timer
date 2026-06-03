@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -23,6 +26,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -49,20 +54,34 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.annotation.StringRes
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import android.os.SystemClock
+import com.gymresttimer.R
 import com.gymresttimer.domain.StopwatchState
 import com.gymresttimer.domain.WorkoutState
 import com.gymresttimer.util.formatStopwatch
 import com.gymresttimer.util.formatTime
 import kotlinx.coroutines.delay
 
-private enum class DashboardTab(val label: String) { Timer("Timer"), Stopwatch("Stopwatch") }
+private enum class DashboardTab(@StringRes val labelRes: Int) {
+    Timer(R.string.tab_timer),
+    Stopwatch(R.string.tab_stopwatch),
+}
+
+/** Language options shown in the overflow menu: BCP-47 tag to display label. */
+private val languageOptions = listOf(
+    "en" to R.string.lang_english,
+    "pt-BR" to R.string.lang_portuguese_br,
+    "fr" to R.string.lang_french,
+)
 
 @Composable
 fun DashboardScreen(
@@ -81,6 +100,7 @@ fun DashboardScreen(
     onStopwatchReset: () -> Unit,
     onStopwatchLap: () -> Unit,
     onRequestNotifications: () -> Unit,
+    onSelectLanguage: (languageTag: String) -> Unit,
     viewModel: DashboardViewModel = hiltViewModel(),
 ) {
     val ui by viewModel.uiState.collectAsStateWithLifecycle()
@@ -98,13 +118,21 @@ fun DashboardScreen(
                 .background(bg)
                 .padding(padding),
         ) {
-            Text(
-                "Gym Rest Timer",
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 12.dp),
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, top = 20.dp, end = 8.dp, bottom = 12.dp),
+            ) {
+                Text(
+                    stringResource(R.string.app_name),
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f),
+                )
+                LanguageMenu(onSelectLanguage = onSelectLanguage)
+            }
 
             TabRow(
                 selectedTabIndex = tab.ordinal,
@@ -125,7 +153,7 @@ fun DashboardScreen(
                         onClick = { tab = t },
                         selectedContentColor = MaterialTheme.colorScheme.primary,
                         unselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                        text = { Text(t.label, fontWeight = FontWeight.SemiBold) },
+                        text = { Text(stringResource(t.labelRes), fontWeight = FontWeight.SemiBold) },
                     )
                 }
             }
@@ -164,6 +192,59 @@ fun DashboardScreen(
 }
 
 @Composable
+private fun LanguageMenu(onSelectLanguage: (String) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    // Highlight whichever language the UI is currently rendered in.
+    val activeTag = LocalConfiguration.current.locales[0].toLanguageTag()
+    fun isSelected(tag: String): Boolean = when (tag) {
+        "pt-BR" -> activeTag.startsWith("pt")
+        "fr" -> activeTag.startsWith("fr")
+        else -> !activeTag.startsWith("pt") && !activeTag.startsWith("fr")
+    }
+
+    Box {
+        IconButton(onClick = { expanded = true }) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = stringResource(R.string.menu),
+                tint = MaterialTheme.colorScheme.onBackground,
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        ) {
+            Text(
+                stringResource(R.string.language),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 13.sp,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 4.dp),
+            )
+            languageOptions.forEach { (tag, labelRes) ->
+                DropdownMenuItem(
+                    text = { Text(stringResource(labelRes), color = MaterialTheme.colorScheme.onSurface) },
+                    trailingIcon = {
+                        if (isSelected(tag)) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                    },
+                    onClick = {
+                        expanded = false
+                        onSelectLanguage(tag)
+                    },
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun PermissionsCard(
     hasNotificationPermission: Boolean,
     onRequestNotifications: () -> Unit,
@@ -177,9 +258,9 @@ private fun PermissionsCard(
             .padding(20.dp),
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Notification permission required", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
-            Text("Required for the foreground service notification.", color = MaterialTheme.colorScheme.onSurface)
-            TextButton(onClick = onRequestNotifications) { Text("Grant notifications", color = MaterialTheme.colorScheme.primary) }
+            Text(stringResource(R.string.notif_permission_title), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+            Text(stringResource(R.string.notif_permission_body), color = MaterialTheme.colorScheme.onSurface)
+            TextButton(onClick = onRequestNotifications) { Text(stringResource(R.string.grant_notifications), color = MaterialTheme.colorScheme.primary) }
         }
     }
 }
@@ -231,7 +312,7 @@ private fun TimerTab(
 
         if (ui.workout !is WorkoutState.Idle) {
             TextButton(onClick = onResetSets, modifier = Modifier.align(Alignment.End)) {
-                Text("Reset sets", color = MaterialTheme.colorScheme.primary)
+                Text(stringResource(R.string.reset_sets), color = MaterialTheme.colorScheme.primary)
             }
         }
 
@@ -239,7 +320,7 @@ private fun TimerTab(
 
         when (val s = ui.workout) {
             WorkoutState.Idle -> Text(
-                "Toggle workout on to start tracking sets.",
+                stringResource(R.string.toggle_hint),
                 color = MaterialTheme.colorScheme.onSurface,
             )
             is WorkoutState.ActiveSet -> ActiveSetPanel(setNumber = s.currentSet, onFinishSet = onFinishSet)
@@ -266,7 +347,7 @@ private fun ProfileSelector(
             value = selectedLabel,
             onValueChange = {},
             readOnly = true,
-            label = { Text("Rest profile") },
+            label = { Text(stringResource(R.string.profile_label)) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -299,7 +380,7 @@ private fun WorkoutToggle(isOn: Boolean, enabled: Boolean, onToggle: (Boolean) -
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            text = if (isOn) "Workout on" else "Workout off",
+            text = stringResource(if (isOn) R.string.workout_on else R.string.workout_off),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = 20.sp,
             modifier = Modifier.padding(end = 16.dp),
@@ -325,7 +406,7 @@ private fun ActiveSetPanel(setNumber: Int, onFinishSet: () -> Unit) {
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text("SET $setNumber", color = MaterialTheme.colorScheme.primary, fontSize = 56.sp, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.set_label, setNumber), color = MaterialTheme.colorScheme.primary, fontSize = 56.sp, fontWeight = FontWeight.Bold)
         Button(
             onClick = onFinishSet,
             colors = ButtonDefaults.buttonColors(
@@ -335,7 +416,7 @@ private fun ActiveSetPanel(setNumber: Int, onFinishSet: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(64.dp),
-        ) { Text("Finish set", fontSize = 20.sp, fontWeight = FontWeight.Bold) }
+        ) { Text(stringResource(R.string.action_finish_set), fontSize = 20.sp, fontWeight = FontWeight.Bold) }
     }
 }
 
@@ -352,7 +433,7 @@ private fun RestCountdownPanel(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(
-            "SET ${state.currentSet} · REST",
+            stringResource(R.string.set_rest_label, state.currentSet),
             color = MaterialTheme.colorScheme.primary,
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
@@ -365,7 +446,7 @@ private fun RestCountdownPanel(
                 fontWeight = FontWeight.Bold,
             )
         }
-        if (state.paused) Text("PAUSED", color = MaterialTheme.colorScheme.primary)
+        if (state.paused) Text(stringResource(R.string.paused), color = MaterialTheme.colorScheme.primary)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -377,7 +458,7 @@ private fun RestCountdownPanel(
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                 ),
                 modifier = Modifier.weight(1f).height(56.dp),
-            ) { Text("+30s", fontWeight = FontWeight.Bold) }
+            ) { Text(stringResource(R.string.action_add_30), fontWeight = FontWeight.Bold) }
             Button(
                 onClick = onSkip,
                 colors = ButtonDefaults.buttonColors(
@@ -385,10 +466,10 @@ private fun RestCountdownPanel(
                     contentColor = MaterialTheme.colorScheme.primary,
                 ),
                 modifier = Modifier.weight(1f).height(56.dp),
-            ) { Text("Skip rest", fontWeight = FontWeight.Bold) }
+            ) { Text(stringResource(R.string.skip_rest), fontWeight = FontWeight.Bold) }
         }
         TextButton(onClick = onPauseResume) {
-            Text(if (state.paused) "Resume" else "Pause", color = MaterialTheme.colorScheme.primary)
+            Text(stringResource(if (state.paused) R.string.action_resume else R.string.action_pause), color = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -434,11 +515,13 @@ private fun StopwatchTab(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            val primaryLabel = when {
-                !state.isRunning && state.isIdle -> "Start"
-                !state.isRunning -> "Resume"
-                else -> "Pause"
-            }
+            val primaryLabel = stringResource(
+                when {
+                    !state.isRunning && state.isIdle -> R.string.action_start
+                    !state.isRunning -> R.string.action_resume
+                    else -> R.string.action_pause
+                }
+            )
             Button(
                 onClick = {
                     when {
@@ -465,7 +548,7 @@ private fun StopwatchTab(
                 modifier = Modifier.weight(1f).height(64.dp),
             ) {
                 Text(
-                    if (state.isRunning) "Lap" else "Reset",
+                    stringResource(if (state.isRunning) R.string.action_lap else R.string.action_reset),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                 )
@@ -487,7 +570,7 @@ private fun StopwatchTab(
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(
-                            "Lap $lapNumber",
+                            stringResource(R.string.lap_number, lapNumber),
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.SemiBold,
                         )

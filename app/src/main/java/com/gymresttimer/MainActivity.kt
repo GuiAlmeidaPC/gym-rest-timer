@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.app.RemoteAction
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -39,6 +40,7 @@ import com.gymresttimer.service.TimerService
 import com.gymresttimer.ui.dashboard.DashboardScreen
 import com.gymresttimer.ui.pip.PipContent
 import com.gymresttimer.ui.theme.GymRestTimerTheme
+import com.gymresttimer.util.AppLocale
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.combine
@@ -57,6 +59,10 @@ class MainActivity : ComponentActivity() {
     ) { /* state re-checked on resume */ }
 
     private val inPipMode = mutableStateOf(false)
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(AppLocale.wrap(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,6 +135,10 @@ class MainActivity : ComponentActivity() {
             onStopwatchReset = { TimerService.send(this, TimerService.ACTION_STOPWATCH_RESET) },
             onStopwatchLap = { TimerService.send(this, TimerService.ACTION_STOPWATCH_LAP) },
             onRequestNotifications = ::requestNotificationPermission,
+            onSelectLanguage = { tag ->
+                AppLocale.setTag(this, tag)
+                recreate()
+            },
         )
     }
 

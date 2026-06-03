@@ -32,6 +32,7 @@ import com.gymresttimer.domain.StopwatchStateRepository
 import com.gymresttimer.domain.WorkoutEvent
 import com.gymresttimer.domain.WorkoutState
 import com.gymresttimer.domain.WorkoutStateRepository
+import com.gymresttimer.util.AppLocale
 import com.gymresttimer.util.formatStopwatchShort
 import com.gymresttimer.util.formatTime
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,6 +70,10 @@ class TimerService : LifecycleService() {
             @Suppress("DEPRECATION")
             getSystemService(VIBRATOR_SERVICE) as? Vibrator
         }
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(AppLocale.wrap(newBase))
     }
 
     override fun onCreate() {

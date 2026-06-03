@@ -18,10 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.gymresttimer.R
 import com.gymresttimer.domain.ActiveMode
 import com.gymresttimer.domain.ActiveModeHolder
 import com.gymresttimer.domain.StopwatchStateRepository
@@ -46,11 +48,11 @@ fun PipContent(
     val text = when (mode) {
         ActiveMode.Timer -> when (val s = timer) {
             is WorkoutState.RestCountdown -> {
-                setLabel = "SET ${s.currentSet}"
+                setLabel = stringResource(R.string.set_label, s.currentSet)
                 formatTime(s.secondsRemaining)
             }
             is WorkoutState.ActiveSet -> {
-                setLabel = "SET ${s.currentSet}"
+                setLabel = stringResource(R.string.set_label, s.currentSet)
                 "0:00"
             }
             WorkoutState.Idle -> "—"
