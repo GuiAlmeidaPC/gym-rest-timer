@@ -85,11 +85,13 @@ class TimerService : LifecycleService() {
             ) { t, s, m -> Triple(t, s, m) }
                 .distinctUntilChanged()
                 .collect { (t, _, _) ->
+                    // Stop before touching the notification so we never re-post the
+                    // idle ("Workout active") notification on the way to teardown.
+                    if (maybeStopSelf()) return@collect
                     refreshNotification()
                     handleTimerSideEffects(t)
                     manageTimerTickLoop(t)
                     manageStopwatchRefresh()
-                    maybeStopSelf()
                 }
         }
     }
@@ -155,14 +157,22 @@ class TimerService : LifecycleService() {
         else -> ActiveMode.None
     }
 
-    private fun maybeStopSelf() {
+    /** Stops the service when nothing is active. Returns true if it initiated teardown. */
+    private fun maybeStopSelf(): Boolean {
         val timerIdle = timerRepo.state.value == WorkoutState.Idle
         val stopwatchIdle = stopwatchRepo.state.value.isIdle
         if (timerIdle && stopwatchIdle) {
             activeMode.set(ActiveMode.None)
+            timerTickJob?.cancel()
+            timerTickJob = null
+            stopwatchRefreshJob?.cancel()
+            stopwatchRefreshJob = null
             stopForeground(STOP_FOREGROUND_REMOVE)
+            getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
             stopSelf()
+            return true
         }
+        return false
     }
 
     // region: timer tick loop
