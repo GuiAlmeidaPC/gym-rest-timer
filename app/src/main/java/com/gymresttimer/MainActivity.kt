@@ -136,7 +136,7 @@ class MainActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val running = mode != ActiveMode.None
         val builder = PictureInPictureParams.Builder()
-            .setAspectRatio(Rational(1, 1))
+            .setAspectRatio(Rational(16, 9))
             .setActions(buildActions(mode, timer, stopwatch))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             builder.setAutoEnterEnabled(running)
@@ -201,7 +201,7 @@ class MainActivity : ComponentActivity() {
             runCatching {
                 enterPictureInPictureMode(
                     PictureInPictureParams.Builder()
-                        .setAspectRatio(Rational(1, 1))
+                        .setAspectRatio(Rational(16, 9))
                         .setActions(buildActions(activeMode.current(), workoutRepo.state.value, stopwatchRepo.state.value))
                         .build(),
                 )
