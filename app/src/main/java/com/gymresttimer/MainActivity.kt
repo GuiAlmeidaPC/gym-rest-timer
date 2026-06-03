@@ -154,6 +154,7 @@ class MainActivity : ComponentActivity() {
         ActiveMode.Timer -> when (timer) {
             is WorkoutState.ActiveSet -> listOf(
                 action(R.drawable.ic_check, "Finish set", TimerService.ACTION_FINISH_SET),
+                action(R.drawable.ic_refresh, "Reset sets", TimerService.ACTION_RESET_SETS),
                 action(R.drawable.ic_stop, "Stop", TimerService.ACTION_STOP_WORKOUT),
             )
             is WorkoutState.RestCountdown -> listOf(
